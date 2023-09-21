@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find px4_controller)/launch/px4_sitl.launch"/>
+    <node pkg="px4_controller" type="teleop_key.py" name="key_input" output="screen"/>
+    <node pkg="px4_controller" type="velocity_keyboard_control.py" name="velocity_control" output="screen"/>
+</launch>
