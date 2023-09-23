@@ -71,27 +71,13 @@ void loop(){
     bits bit;
     bit.x = 0;
     currentTime = millis();
-//    if (currentTime - lastPublishTime >= 10000) {
-//      output = "Wait for 3 seconds from now!!";
-//      str_msg.data = output.c_str();
-//      chatter.publish( &str_msg );
-//      delay(1000);
-//      lastPublishTime = currentTime;
-//    }
-//    LoRa.beginPacket();
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.print(bit.x);
-//    LoRa.endPacket();
+    if (currentTime - lastPublishTime >= 250) { // the time decides the frequency of transmisison
+      str_msg.data = "Transmitting";
+      chatter.publish( &str_msg );
+      LoRa.beginPacket();
+      LoRa.print(output);
+      LoRa.endPacket();
+      lastPublishTime = currentTime;
+    }
   }
-  
 }
