@@ -48,19 +48,19 @@ void loop(){
     nh.spinOnce();
     // create a JSON document using the ArduinoJson library
     StaticJsonDocument<200> doc;
-    doc["w"] = msg.w;
-    doc["a"] = msg.a;
-    doc["s"] = msg.s;
+    doc["a"] = msg.w;
+    doc["b"] = msg.a;
+    doc["c"] = msg.s;
     doc["d"] = msg.d;
-    doc["q"] = msg.q;
-    doc["e"] = msg.e;
-    doc["z"] = msg.z;
-    doc["x"] = msg.x;
-    doc["c"] = msg.c;
-    doc["l"] = msg.key_left_shift;
-    doc["m"] = msg.key_left_ctrl;
-    doc["n"] = msg.key_left;
-    doc["o"] = msg.key_right;
+    doc["e"] = msg.q;
+    doc["f"] = msg.e;
+    doc["g"] = msg.z;
+    doc["h"] = msg.x;
+    doc["i"] = msg.c;
+    doc["j"] = msg.key_left_shift;
+    doc["k"] = msg.key_left_ctrl;
+    doc["l"] = msg.key_left;
+    doc["m"] = msg.key_right;
   
     //need to clear output here
     output="";

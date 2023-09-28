@@ -150,6 +150,11 @@ catkin_install_python(PROGRAMS
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+catkin_install_python(PROGRAMS
+  scripts/receiver/lora_bridge.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 add_executable(talker scripts/demo_sub_pub.cpp)
 target_link_libraries(talker ${catkin_LIBRARIES})
 add_dependencies(talker px4_controller_generate_messages_cpp)
