@@ -6,6 +6,15 @@
 #include <px4_controller/key.h>
 #include <LoRa.h>
 #include <SPI.h>
+#include <string>
+
+
+using namespace std;
+
+typedef struct bits
+{
+    unsigned x:1;
+} bits;
 
 ros::NodeHandle nh;
 std_msgs::String str_msg;
@@ -18,47 +27,58 @@ void messageCb( const px4_controller::key& received_msg){
 // Publisher and subscribers
 ros::Subscriber<px4_controller::key> sub("/keyboard", &messageCb );
 ros::Publisher chatter("chatter", &str_msg);
+String output;
 
 void setup(){
   nh.initNode();
   nh.advertise(chatter);
   nh.subscribe(sub);
+//  Serial.begin(9600);
   if (!LoRa.begin(915E6)) {
-    Serial.println("Starting LoRa failed!");
+//    Serial.println("Starting LoRa failed!");
     while (1);
   }
 }
 
 void loop(){
-  // handle received messages
-  nh.spinOnce();
-
-  // create a JSON document using the ArduinoJson library
-  StaticJsonDocument<200> doc;
-  doc["w"] = msg.w;
-  doc["a"] = msg.a;
-  doc["s"] = msg.s;
-  doc["d"] = msg.d;
-  doc["q"] = msg.q;
-  doc["e"] = msg.e;
-  doc["z"] = msg.z;
-  doc["x"] = msg.x;
-  doc["c"] = msg.c;
-  doc["lshift"] = msg.key_left_shift;
-  doc["lctrl"] = msg.key_left_ctrl;
-  doc["left"] = msg.key_left;
-  doc["right"] = msg.key_right;
-
-  // serialize JSON document into a string
-  String output;
-  serializeJson(doc, output);
-
-  LoRa.beginPacket();
-  LoRa.print(output);
-  LoRa.endPacket();
-
   // publish the string
-  str_msg.data = output.c_str();
-  chatter.publish( &str_msg );
+  unsigned long currentTime = 0;
+  unsigned long lastPublishTime = 0;
+  while (1){
+    nh.spinOnce();
+    // create a JSON document using the ArduinoJson library
+    StaticJsonDocument<200> doc;
+    doc["w"] = msg.w;
+    doc["a"] = msg.a;
+    doc["s"] = msg.s;
+    doc["d"] = msg.d;
+    doc["q"] = msg.q;
+    doc["e"] = msg.e;
+    doc["z"] = msg.z;
+    doc["x"] = msg.x;
+    doc["c"] = msg.c;
+    doc["l"] = msg.key_left_shift;
+    doc["m"] = msg.key_left_ctrl;
+    doc["n"] = msg.key_left;
+    doc["o"] = msg.key_right;
   
+    //need to clear output here
+    output="";
+    serializeJson(doc, output);
+    output += "u";
+    str_msg.data = output.c_str();
+    chatter.publish( &str_msg );
+  
+    bits bit;
+    bit.x = 0;
+    currentTime = millis();
+    if (currentTime - lastPublishTime >= 250) { // the time decides the frequency of transmisison
+      str_msg.data = "Transmitting";
+      chatter.publish( &str_msg );
+      LoRa.beginPacket();
+      LoRa.print(output);
+      LoRa.endPacket();
+      lastPublishTime = currentTime;
+    }
+  }
 }
