@@ -129,7 +129,7 @@ def off(key:Key):
         key_state["j"]=0
 
 rospy.init_node("Keypub")  
-pub=rospy.Publisher("/keyboard",key,queue_size=10)
+pub=rospy.Publisher("keyboard",key,queue_size=10)
 print("Enter the key here, use ctrl c to exit,press esc to exit")
 subprocess.run(["stty","-echo"])
 listener = Listener(on_press=on,on_release=off)
