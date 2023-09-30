@@ -65,7 +65,7 @@ catkin_install_python(PROGRAMS
 )
 
 catkin_install_python(PROGRAMS
-  scripts/manual_control/controller_1.py
+  scripts/manual_control/controller_1.py scripts/manual_control/server_application.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
