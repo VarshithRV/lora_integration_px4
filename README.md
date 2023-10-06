@@ -1,3 +1,5 @@
-# ROS bridge for manual control
+# README
 
-The script controller.py in ./scripts/manual_control is capable of manual keyboard control of the drone.
+Interfaces a quadcopter running on PX4-Autopilot with the groundstation using LoRa communication. <br>
+Contains applications that interface with the quadcopter with LoRaWAN for real time or autonomous control.
+
